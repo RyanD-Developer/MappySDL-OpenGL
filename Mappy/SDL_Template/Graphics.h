@@ -26,8 +26,8 @@ namespace SDLFramework {
 			GL
 		};
 
-		static const short SCREEN_WIDTH = 1024;
-		static const short SCREEN_HEIGHT = 896;
+		static const short SCREEN_WIDTH = 1450;
+		static const short SCREEN_HEIGHT = 1180;
 		const char* WINDOW_TITLE = "Mappy";
 
 	protected:

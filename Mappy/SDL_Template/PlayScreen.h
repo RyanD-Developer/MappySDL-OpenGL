@@ -4,6 +4,7 @@
 #include "AudioManager.h"
 #include "Scoreboard.h"
 #include "Player.h"
+#include "Treasure.h"
 
 class PlayScreen : public GameEntity {
 private:
@@ -16,8 +17,15 @@ private:
 	Scoreboard* mTopScore;
 	Timer * mTimer;
 	AudioManager * mAudio;
-
+    Texture* mBackground;
 	Player * mPlayer;
+	Treasure* mTreasure[10];
+
+	bool xTaken[6];
+	bool yTaken[5];
+	bool xDone = false;
+	bool yDone = false;
+	float Timer1 = 0.0f;
 
 
 public:

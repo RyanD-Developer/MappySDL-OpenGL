@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Galaga">
-      <UniqueIdentifier>{83bc7597-725f-4d03-b625-ee4eea112486}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Galaga">
-      <UniqueIdentifier>{b114a4f8-cc47-44ef-825e-63eac87c9f0c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Entities">
       <UniqueIdentifier>{55b059d7-d9d5-4f1a-9ba5-4ce88bf97783}</UniqueIdentifier>
     </Filter>
@@ -46,6 +40,12 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{4e41fd5e-6602-46d6-b6d0-3c90c0c3ae19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Mappy">
+      <UniqueIdentifier>{83bc7597-725f-4d03-b625-ee4eea112486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mappy">
+      <UniqueIdentifier>{b114a4f8-cc47-44ef-825e-63eac87c9f0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -61,10 +61,10 @@
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="StartScreen.cpp">
-      <Filter>Source Files\Galaga</Filter>
+      <Filter>Source Files\Mappy</Filter>
     </ClCompile>
     <ClCompile Include="Scoreboard.cpp">
-      <Filter>Source Files\Galaga</Filter>
+      <Filter>Source Files\Mappy</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>Source Files</Filter>
@@ -73,10 +73,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScreenManager.cpp">
-      <Filter>Source Files\Galaga</Filter>
+      <Filter>Source Files\Mappy</Filter>
     </ClCompile>
     <ClCompile Include="PlayScreen.cpp">
-      <Filter>Source Files\Galaga</Filter>
+      <Filter>Source Files\Mappy</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -94,7 +94,7 @@
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Galaga</Filter>
+      <Filter>Source Files\Mappy</Filter>
     </ClCompile>
     <ClCompile Include="BezierPath.cpp">
       <Filter>Source Files</Filter>
@@ -129,6 +129,9 @@
     <ClCompile Include="AnimatedGLTexture.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Treasure.cpp">
+      <Filter>Source Files\Mappy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -141,10 +144,10 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="StartScreen.h">
-      <Filter>Header Files\Galaga</Filter>
+      <Filter>Header Files\Mappy</Filter>
     </ClInclude>
     <ClInclude Include="Scoreboard.h">
-      <Filter>Header Files\Galaga</Filter>
+      <Filter>Header Files\Mappy</Filter>
     </ClInclude>
     <ClInclude Include="MathHelper.h">
       <Filter>Header Files</Filter>
@@ -156,10 +159,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScreenManager.h">
-      <Filter>Header Files\Galaga</Filter>
+      <Filter>Header Files\Mappy</Filter>
     </ClInclude>
     <ClInclude Include="PlayScreen.h">
-      <Filter>Header Files\Galaga</Filter>
+      <Filter>Header Files\Mappy</Filter>
     </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -177,7 +180,7 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header Files\Galaga</Filter>
+      <Filter>Header Files\Mappy</Filter>
     </ClInclude>
     <ClInclude Include="BezierPath.h">
       <Filter>Header Files</Filter>
@@ -214,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="AnimatedGLTexture.h">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Treasure.h">
+      <Filter>Header Files\Mappy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

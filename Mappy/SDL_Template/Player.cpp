@@ -4,29 +4,31 @@
 
 void Player::HandleMovement() {
 	if (mInput->KeyDown(SDL_SCANCODE_RIGHT)) {
-		Translate(Vec2_Right * mMoveSpeed * mTimer->DeltaTime(), World);
 		mRat->Update();
 		mRat->Scale(Vector2(-1.0f, 1.0f));
+		Direction = "Right";
 	}
 	else if (mInput->KeyDown(SDL_SCANCODE_LEFT)) {
-		Translate(-Vec2_Right * mMoveSpeed * mTimer->DeltaTime(), World);
 		mRat->Update();
 		mRat->Scale(Vector2(1.0f, 1.0f));
+		Direction = "Left";
 	}
-
-	Vector2 pos = Position(Local);
-	if (pos.x < mMoveBounds.x) {
-		pos.x = mMoveBounds.x;
+	else if (mInput->KeyDown(SDL_SCANCODE_UP)) {
+		Translate(-Vec2_Up * 300.0f * mTimer->DeltaTime(), World);
+		mRat->Scale(Vector2(1.0f, 1.0f));
+		Direction = "Up";
 	}
-	else if (pos.x > mMoveBounds.y) {
-		pos.x = mMoveBounds.y;
+	else if (mInput->KeyDown(SDL_SCANCODE_DOWN)) {
+		Translate(Vec2_Up * 300.0f * mTimer->DeltaTime(), World);
+		mRat->Scale(Vector2(1.0f, 1.0f));
+		Direction = "Down";
 	}
-
-	Position(pos);
+	else {
+		Direction = "None";
+	}
 }
-
-void Player::HandleFiring() {
-	
+std::string Player::MoveReturn() {
+	return Direction;
 }
 
 Player::Player() {
@@ -44,9 +46,6 @@ Player::Player() {
 	mRat = new AnimatedGLTexture("Walking.png", 0, 0, 68, 64, 3, 0.25f, Animation::Layouts::Horizontal);
 	mRat->Parent(this);
 	mRat->Position(Vec2_Zero);
-
-	mMoveSpeed = 300.0f;
-	mMoveBounds = Vector2(0.0f, 800.0f);
 
 	mDeathAnimation = new AnimatedGLTexture("PlayerExplosion.png", 0, 0, 128, 128, 4, 1.0f, Animation::Layouts::Horizontal);
 	mDeathAnimation->Parent(this);
@@ -81,7 +80,9 @@ void Player::Visible(bool visible) {
 bool Player::IsAnimating() {
 	return mAnimating;
 }
-
+void Player::SetMoveBounds(Vector2(FartniteBalls)) {
+	mMoveBounds = FartniteBalls;
+}
 int Player::Score() {
 	return mScore;
 }
@@ -124,7 +125,6 @@ void Player::Update() {
 	else {
 		if (Active()) {
 			HandleMovement();
-			HandleFiring();
 		}
 	}
 }

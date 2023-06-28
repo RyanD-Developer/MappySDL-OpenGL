@@ -3,7 +3,7 @@
 #include "AnimatedGLTexture.h"
 #include "AudioManager.h"
 #include "InputManager.h"
-#include "Bullet.h"
+#include "PhysEntity.h"
 
 using namespace SDLFramework;
 
@@ -23,12 +23,12 @@ private:
 	AnimatedGLTexture* mRat;
 	AnimatedGLTexture* mDeathAnimation;
 
+	std::string Direction;
 	float mMoveSpeed;
 	Vector2 mMoveBounds;
 
 private:
 	void HandleMovement();
-	void HandleFiring();
 
 public:
 	Player();
@@ -45,6 +45,8 @@ public:
 	// Inherited from PhysEntity
 	bool IgnoreCollisions() override;
 	void Hit(PhysEntity* other) override;
+	std::string MoveReturn();
+	void SetMoveBounds(Vector2(FartniteBalls));
 
 	bool WasHit();
 
