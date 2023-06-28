@@ -46,7 +46,7 @@ public:
 	bool IgnoreCollisions() override;
 	void Hit(PhysEntity* other) override;
 	std::string MoveReturn();
-	void SetMoveBounds(Vector2(FartniteBalls));
+	void SetMoveBounds(Vector2(MB));
 
 	bool WasHit();
 

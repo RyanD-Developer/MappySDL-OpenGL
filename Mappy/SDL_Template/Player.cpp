@@ -80,8 +80,8 @@ void Player::Visible(bool visible) {
 bool Player::IsAnimating() {
 	return mAnimating;
 }
-void Player::SetMoveBounds(Vector2(FartniteBalls)) {
-	mMoveBounds = FartniteBalls;
+void Player::SetMoveBounds(Vector2(MB)) {
+	mMoveBounds = MB;
 }
 int Player::Score() {
 	return mScore;
