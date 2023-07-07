@@ -1,38 +1,39 @@
-#ifndef __TREASURE_H
-#define __TREASURE_H
+#ifndef __DOORS_H
+#define __DOORS_H
 #include "AnimatedGLTexture.h"
 #include "AudioManager.h"
 #include "PhysEntity.h"
 
 using namespace SDLFramework;
 
-class Treasure : public PhysEntity {
+class Doors : public PhysEntity {
 private:
 	Timer* mTimer;
 	AudioManager* mAudio;
 
-	AnimatedGLTexture* mTreasure;
-	bool TSetTexture = false;
+	GLTexture* mDoors[4];
+
 	bool mVisible;
+	bool IsOpen = false;
+	bool Animate = false;
+
 	int PositionX;
 	int PositionY;
-	int Sprite;
-private:
-	void HandleMovement();
+	float Sprite;
 
 public:
-	Treasure();
-	~Treasure();
+	Doors();
+	~Doors();
 
 	// Inherited from PhysEntity
 	bool IgnoreCollisions() override;
 	void Hit(PhysEntity* other) override;
 	void Visible(bool visible);
-	bool WasHit();
 	void SetPositionX(int x);
 	void SetPositionY(int Y);
-	void SetSprite(int s);
 	void Update() override;
 	void Render() override;
+	bool CheckDoorOpen();
+	void OpenDoor(bool b);
 };
 #endif

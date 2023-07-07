@@ -117,3 +117,15 @@ void Treasure::Render() {
 
 	PhysEntity::Render();
 }
+
+void Treasure::SetPositionX(int x) {
+	PositionX = x;
+}
+
+void Treasure::SetPositionY(int Y) {
+	PositionY = Y;
+}
+
+void Treasure::SetSprite(int s) {
+	Sprite = s;
+}

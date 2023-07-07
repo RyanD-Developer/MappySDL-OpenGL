@@ -132,6 +132,12 @@
     <ClCompile Include="Treasure.cpp">
       <Filter>Source Files\Mappy</Filter>
     </ClCompile>
+    <ClCompile Include="Trampoline.cpp">
+      <Filter>Source Files\Mappy</Filter>
+    </ClCompile>
+    <ClCompile Include="Doors.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -220,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="Treasure.h">
       <Filter>Header Files\Mappy</Filter>
+    </ClInclude>
+    <ClInclude Include="Trampoline.h">
+      <Filter>Header Files\Mappy</Filter>
+    </ClInclude>
+    <ClInclude Include="Doors.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

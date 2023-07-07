@@ -13,22 +13,69 @@ void Player::HandleMovement() {
 		mRat->Scale(Vector2(1.0f, 1.0f));
 		Direction = "Left";
 	}
-	else if (mInput->KeyDown(SDL_SCANCODE_UP)) {
-		Translate(-Vec2_Up * 300.0f * mTimer->DeltaTime(), World);
-		mRat->Scale(Vector2(1.0f, 1.0f));
-		Direction = "Up";
-	}
-	else if (mInput->KeyDown(SDL_SCANCODE_DOWN)) {
-		Translate(Vec2_Up * 300.0f * mTimer->DeltaTime(), World);
-		mRat->Scale(Vector2(1.0f, 1.0f));
-		Direction = "Down";
-	}
 	else {
 		Direction = "None";
 	}
+
+	if (GoingDown) {
+		Translate(Vec2_Up * 150.0f * mTimer->DeltaTime(), World);
+	}
+    if (GoingUp) {
+		Translate(-Vec2_Up * 150.0f * mTimer->DeltaTime(), World);
+	}
+	for (int i = 0; i < 10; i++) {
+		if (!InPlace && !GoingUp) {
+			if (Position().y < 449.2f && !GoingDown) {
+				Translate(Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+			}
+			else if (Position().y > 449.3f && Position().y < 576.7f && !GoingDown) {
+				Translate(Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+			}
+			else if (Position().y > 576.8f && Position().y < 704.2f && !GoingDown) {
+				Translate(Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+			}
+			else if (Position().y > 704.3f && Position().y < 831.8f && !GoingDown) {
+				Translate(Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+			}
+			else if (Position().y > 831.9f && Position().y < 959.2f && !GoingDown) {
+				Translate(Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+			}
+			else if (Position().y > 959.3f && Position().y < 1086.8f && !GoingDown) {
+				if (Position().y < 1086.8) {
+					Translate(Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+				}
+				else if (Position().y > 1086.9) {
+					Translate(-Vec2_Up * 10.0f * mTimer->DeltaTime(), World);
+				}
+			}
+			if (Position().y >= 449.2 && Position().y <= 449.4 && !GoingDown) {
+				InPlace = true;
+			}
+			else if (Position().y >= 576.7 && Position().y <= 576.9 && !GoingDown) {
+				InPlace = true;
+			}
+			else if (Position().y >= 704.2 && Position().y <= 704.4 && !GoingDown) {
+				InPlace = true;
+			}
+			else if (Position().y >= 831.8 && Position().y <= 832 && !GoingDown) {
+				InPlace = true;
+			}
+			else if (Position().y >= 959.2 && Position().y <= 959.4 && !GoingDown) {
+				InPlace = true;
+			}
+			else if (Position().y >= 1086.8 && Position().y <= 1086.9 && !GoingDown) {
+				InPlace = true;
+			}
+		}
+	}
+	
 }
 std::string Player::MoveReturn() {
 	return Direction;
+}
+
+void Player::SetInPlace(bool b) {
+	InPlace = b;
 }
 
 Player::Player() {
@@ -51,6 +98,7 @@ Player::Player() {
 	mDeathAnimation->Parent(this);
 	mDeathAnimation->Position(Vec2_Zero);
 	mDeathAnimation->SetWrapMode(Animation::WrapModes::Once);
+	//AddCollider(new BoxCollider(Vector2(56.0f, 52.0f)));
 
 	mId = PhysicsManager::Instance()->RegisterEntity(this, PhysicsManager::CollisionLayers::Friendly);
 
@@ -59,7 +107,7 @@ Player::Player() {
 
 Player::~Player() {
 	mTimer = nullptr;
-	mInput = nullptr;
+	
 	mAudio = nullptr;
 
 	delete mRat;
@@ -124,6 +172,7 @@ void Player::Update() {
 	}
 	else {
 		if (Active()) {
+			std::cout << InPlace << std::endl;
 			HandleMovement();
 		}
 	}
@@ -140,4 +189,17 @@ void Player::Render() {
 	}
 
 	PhysEntity::Render();
+}
+
+void Player::SetGoingDown(bool b) {
+	GoingDown = b;
+}
+void Player::SetGoingUp(bool b) {
+	GoingUp = b;
+}
+bool Player::GetGoingDown() {
+	return GoingDown;
+}
+bool Player::GetGoingUp() {
+	return GoingUp;
 }

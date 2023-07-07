@@ -16,6 +16,9 @@ private:
 	bool mVisible;
 	bool mAnimating;
 	bool mWasHit;
+	bool GoingDown;
+	bool GoingUp;
+	bool InPlace;
 
 	int mScore;
 	int mLives;
@@ -36,6 +39,7 @@ public:
 
 	void Visible(bool visible);
 	bool IsAnimating();
+	void SetInPlace(bool b);
 
 	int Score();
 	int Lives();
@@ -47,8 +51,12 @@ public:
 	void Hit(PhysEntity* other) override;
 	std::string MoveReturn();
 	void SetMoveBounds(Vector2(MB));
+	void SetGoingDown(bool b);
+	void SetGoingUp(bool b);
 
 	bool WasHit();
+	bool GetGoingDown();
+	bool GetGoingUp();
 
 	void Update() override;
 	void Render() override;
