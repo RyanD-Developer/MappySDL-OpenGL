@@ -16,24 +16,31 @@ void ScreenManager::Release() {
 }
 
 void ScreenManager::Update() {
+	mStartScreen->P1Score = mPlayScreen->P1Score;
+	mStartScreen->HiScore = mPlayScreen->HiScore;
 
 	switch (mCurrentScreen) {
 	case Start:
 		mStartScreen->Update();
 
 		if (mInput->KeyPressed(SDL_SCANCODE_RETURN)) {
+			if (mPlayScreen->ReturnGameOver()) {
+				mPlayScreen->Reset();
+			}
 			mCurrentScreen = Play;
 		}
 		break;
 	case Play:
 		mPlayScreen->Update();
+
+		if (mInput->KeyPressed(SDL_SCANCODE_ESCAPE)) {
+			mCurrentScreen = Start;
+		}
 		break;
 	}
 }
 
 void ScreenManager::Render() { 
-
-
 	switch (mCurrentScreen) {
 	case Start:
 		mStartScreen->Render();

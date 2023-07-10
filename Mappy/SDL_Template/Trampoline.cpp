@@ -3,7 +3,7 @@
 Trampoline::Trampoline() {
 	mTimer = Timer::Instance();
 	mAudio = AudioManager::Instance();
-
+	HaveSetColor = false;
 	mVisible = true;
 	mTrampolineG = new AnimatedGLTexture("TGreen.png", 0, 0, 120, 64, 6, 0.25f, Animation::Layouts::Horizontal);
 	mTrampolineG->Parent(this);
@@ -51,6 +51,15 @@ void Trampoline::Hit(PhysEntity* other) {
 }
 
 void Trampoline::Update() {
+	if (mTimer1 < 10.1) {
+		mTimer1 += 0.026;
+	}
+	else {
+		mTimer1 = 0.0f;
+		if (TSetColor > 0) {
+			TSetColor -= 1;
+		}
+	}
 	if (!HaveSetColor) {
 		if (TSetColor == 0) {
 			mTrampolineG->Update();
@@ -135,7 +144,10 @@ void Trampoline::Render() {
 
 void Trampoline::SetColor(int Color) {
 	TSetColor = Color;
-	HaveSetColor = false;
+}
+
+int Trampoline::GetColor() {
+	return TSetColor;
 }
 
 void Trampoline::AddColor() {

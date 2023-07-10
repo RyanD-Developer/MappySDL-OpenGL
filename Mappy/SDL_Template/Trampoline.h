@@ -16,6 +16,7 @@ private:
 	AnimatedGLTexture* mTrampolineY;
 	AnimatedGLTexture* mTrampolineR;
 	int TSetColor = 0;
+	float mTimer1 = 0.0f;
 	bool mVisible;
 	bool HaveSetColor;
 	bool BounceAnim = false;
@@ -31,6 +32,9 @@ public:
 	void Visible(bool visible);
 	
 	bool GetBounced();
+
+	int GetColor();
+
 	void SetBounced(bool b);
 	void SetColor(int Color);
 	void AddColor();

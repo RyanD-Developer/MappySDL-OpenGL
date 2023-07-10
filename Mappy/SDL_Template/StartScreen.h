@@ -34,7 +34,6 @@ private:
 	Vector2 mCursorStartPos;
 	Vector2 mCursorOffset;
 	int mSelectedMode;
-
 	// Bottom Bar Entities
 	GameEntity* mBottomBar;
 	Texture* mNamco;
@@ -47,7 +46,8 @@ public:
 	~StartScreen();
 
 	int SelectedMode();
-
+	int HiScore = 10000;
+	int P1Score;
 	void ChangeSelectedMode(int change);
 
 	void Update() override;

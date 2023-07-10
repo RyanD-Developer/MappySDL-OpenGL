@@ -13,14 +13,20 @@ void Player::HandleMovement() {
 		mRat->Scale(Vector2(1.0f, 1.0f));
 		Direction = "Left";
 	}
+	else if (mInput->KeyPressed(SDL_SCANCODE_T)) {
+		mWasHit = true;
+		WasHit();
+	}
 	else {
 		Direction = "None";
 	}
 
 	if (GoingDown) {
+		mFalling->Update();
 		Translate(Vec2_Up * 150.0f * mTimer->DeltaTime(), World);
 	}
     if (GoingUp) {
+		mFalling->Update();
 		Translate(-Vec2_Up * 150.0f * mTimer->DeltaTime(), World);
 	}
 	for (int i = 0; i < 10; i++) {
@@ -88,13 +94,17 @@ Player::Player() {
 	mWasHit = false;
 
 	mScore = 0;
-	mLives = 2;
+	mLives = 3;
 
 	mRat = new AnimatedGLTexture("Walking.png", 0, 0, 68, 64, 3, 0.25f, Animation::Layouts::Horizontal);
 	mRat->Parent(this);
 	mRat->Position(Vec2_Zero);
 
-	mDeathAnimation = new AnimatedGLTexture("PlayerExplosion.png", 0, 0, 128, 128, 4, 1.0f, Animation::Layouts::Horizontal);
+	mFalling = new AnimatedGLTexture("Falling.png", 0, 0, 68, 64, 2, 0.25f, Animation::Layouts::Horizontal);
+	mFalling->Parent(this);
+	mFalling->Position(Vec2_Zero);
+
+	mDeathAnimation = new AnimatedGLTexture("DeathAnim.png", 0, 0, 72, 64, 11, 0.50f, Animation::Layouts::Horizontal);
 	mDeathAnimation->Parent(this);
 	mDeathAnimation->Position(Vec2_Zero);
 	mDeathAnimation->SetWrapMode(Animation::WrapModes::Once);
@@ -112,6 +122,9 @@ Player::~Player() {
 
 	delete mRat;
 	mRat = nullptr;
+
+	delete mFalling;
+	mFalling = nullptr;
 
 	delete mDeathAnimation;
 	mDeathAnimation = nullptr;
@@ -145,19 +158,35 @@ void Player::AddScore(int change) {
 
 bool Player::IgnoreCollisions()
 {
-	return !mVisible || mAnimating;
+	return !mVisible || mDead;
 }
 
 void Player::Hit(PhysEntity* other) {
-	mLives -= 1;
-	mAnimating = true;
-	mDeathAnimation->ResetAnimation();
-	mAudio->PlaySFX("SFX/PlayerExplosion.wav");
 	mWasHit = true;
+	mDead = true;
+	WasHit();
 }
 
-bool Player::WasHit() {
+void Player::WasHit() {
+	mWasHit = true;
+	mDead = true;
+	mLives -= 1;
+}
+
+void Player::SetDead(bool D) {
+	mDead = D;
+}
+
+bool Player::GetDead() {
+	return mDead;
+}
+
+bool Player::GetWasHit() {
 	return mWasHit;
+}
+
+bool Player::GetAnimating() {
+	return mAnimating;
 }
 
 void Player::Update() {
@@ -172,8 +201,17 @@ void Player::Update() {
 	}
 	else {
 		if (Active()) {
-			std::cout << InPlace << std::endl;
-			HandleMovement();
+			if (mWasHit && mTimer1 < 3.1) {
+				mTimer1 += 0.026;
+			}
+			else if (mWasHit) {
+				mTimer1 = 0.0f;
+				mAnimating = true;
+				mDeathAnimation->ResetAnimation();
+			}
+			else {
+				HandleMovement();
+			}
 		}
 	}
 }
@@ -184,7 +222,17 @@ void Player::Render() {
 			mDeathAnimation->Render();
 		}
 		else {
-			mRat->Render();
+			if (GoingDown) {
+				mFalling->Render();
+			}
+			else if (GoingUp) {
+				mFalling->Render();
+			} else if (mWasHit && mTimer1 < 5.1) {
+				mFalling->Render();
+			}
+			else {
+				mRat->Render();
+			}
 		}
 	}
 
@@ -202,4 +250,14 @@ bool Player::GetGoingDown() {
 }
 bool Player::GetGoingUp() {
 	return GoingUp;
+}
+
+void Player::Reset() {
+	Direction = "None";
+	mVisible = true;
+	mAnimating = false;
+	mWasHit = false;
+
+	mScore = 0;
+	mLives = 3;
 }

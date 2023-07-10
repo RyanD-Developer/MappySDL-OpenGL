@@ -32,7 +32,8 @@ StartScreen::StartScreen() {
 	mTopScore->Score(10000);
 
 	// logo entities
-	mLogo = new GLTexture("MappySprites.png", 4, 4, 704, 192);
+
+	mLogo = new GLTexture("MappyLogo.png", 0, 0, 704, 192);
 
 	mLogo->Parent(this);
 
@@ -142,6 +143,8 @@ void StartScreen::ChangeSelectedMode(int change) {
 }
 
 void StartScreen::Update() {
+	mTopScore->Score(HiScore);
+	mPlayerOneScore->Score(P1Score);
 	if (mInput->KeyPressed(SDL_SCANCODE_DOWN)) {
 		ChangeSelectedMode(1);
 	}

@@ -15,6 +15,7 @@ private:
 	Texture* mPlayerOne;
 	Texture* mPlayerTwo;
 	Texture* mHiScore;
+	Texture* GameOver;
 	Scoreboard* mLives;
 	InputManager* mInput;
 	Scoreboard* mPlayerOneScore;
@@ -34,13 +35,19 @@ private:
 	bool StuckDoor = false;
 	bool xDone = false;
 	bool yDone = false;
+	bool BGameOver = false;
+	bool LeevelComplete = true;
+	int TreasureCollected = 0;
 	float Timer1 = 0.0f;
-
-
+	int mLeevel = 1;
 public:
 	PlayScreen();
 	~PlayScreen();
-
+	void HandleLeevel();
+	void Reset();
+	int HiScore = 10000;
+	int P1Score;
+	bool ReturnGameOver();
 	void Update() override;
 	void Render() override;
 };

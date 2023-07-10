@@ -7,7 +7,7 @@ Doors::Doors() {
 	mVisible = false;
 	Sprite = 0;
 	delete mDoors[0];
-	mDoors[0] = new GLTexture("Doors.png", 12, 0, 20, 96);
+	mDoors[0] = new GLTexture("Doors.png", 12, 0, 19, 96);
 	mDoors[0]->Parent(this);
 	mDoors[0]->Position(Vec2_Zero);
 	delete mDoors[1];

@@ -19,15 +19,18 @@ private:
 	bool GoingDown;
 	bool GoingUp;
 	bool InPlace;
+	bool mDead = false;
 
 	int mScore;
 	int mLives;
 
 	AnimatedGLTexture* mRat;
+	AnimatedGLTexture* mFalling;
 	AnimatedGLTexture* mDeathAnimation;
 
 	std::string Direction;
 	float mMoveSpeed;
+	float mTimer1 = 0.0f;
 	Vector2 mMoveBounds;
 
 private:
@@ -53,8 +56,13 @@ public:
 	void SetMoveBounds(Vector2(MB));
 	void SetGoingDown(bool b);
 	void SetGoingUp(bool b);
-
-	bool WasHit();
+	void Reset();
+    void WasHit();
+	void SetDead(bool D);
+	
+	bool GetDead();
+	bool GetAnimating();
+	bool GetWasHit();
 	bool GetGoingDown();
 	bool GetGoingUp();
 
