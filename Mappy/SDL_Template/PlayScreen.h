@@ -6,6 +6,7 @@
 #include "AudioManager.h"
 #include "Scoreboard.h"
 #include "Player.h"
+#include "Cat.h"
 #include "Treasure.h"
 #include "Trampoline.h"
 
@@ -27,8 +28,9 @@ private:
 	Treasure* mTreasure[10];
 	Trampoline* mTrampoline[4];
 	Doors* mDoors[5];
-	
-	int TC = 5000;
+	Cat* mCats[3];
+
+	int TC[4];
 	bool BounceBool = false;
 	bool xTaken[6];
 	bool yTaken[5];

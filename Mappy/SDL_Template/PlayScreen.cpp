@@ -34,6 +34,10 @@ PlayScreen::PlayScreen() {
 	mTopScore->Score(10000);
 	mTimer = Timer::Instance();
 	mAudio = AudioManager::Instance();
+	TC[0] = 5000;
+	TC[1] = 5000;
+	TC[2] = 5000;
+	TC[3] = 5000;
 
 	delete mPlayer;
 	mPlayer = new Player();
@@ -53,6 +57,22 @@ PlayScreen::PlayScreen() {
 		mDoors[i]->Parent(this);
 		mDoors[i]->Active(true);
 		mDoors[i]->Position(5000.0f, 5000.0f);
+	}
+	for (int i = 0; i < 3; i++) {
+		delete mCats[i];
+		mCats[i] = new Cat();
+		mCats[i]->Parent(this);
+		mCats[i]->Active(true);
+		mCats[i]->CanMove(true);
+		if (i == 0) {
+			mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.3f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+		}
+		else if (i == 1) {
+			mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.5f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+		}
+		else if (i == 2) {
+			mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.6f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+		}
 	}
 	for (int i = 0; i < 4; i++) {
 		delete mTrampoline[i];
@@ -106,6 +126,10 @@ PlayScreen::~PlayScreen() {
 	for (int i = 0; i < 10; i++) {
 		delete mTreasure[i];
 		mTreasure[i] = nullptr;
+	}
+	for (int i = 0; i < 3; i++) {
+		delete mCats[i];
+		mCats[i] = nullptr;
 	}
 	for (int i = 0; i < 4; i++) {
 		delete mTrampoline[i];
@@ -183,24 +207,114 @@ void PlayScreen::Update() {
 			}
 			for (int i = 0; i < 4; i++) {
 				mTrampoline[i]->Update();
+				for (int j = 0; j < 3; j++) {
+					if (mTrampoline[i]->GetColor() == 3) {
+						if ((mCats[j]->Position().x + 34) <= mTrampoline[i]->Position().x + 60 &&
+							mCats[j]->Position().x - 34 >= (mTrampoline[i]->Position().x - 60) &&
+							(mCats[j]->Position().y + 32) >= mTrampoline[i]->Position().y - 14 &&
+							mCats[j]->Position().y - 32 <= (mTrampoline[i]->Position().y + 50) &&
+							mCats[j]->GetDirection() == "None") {
+							mCats[j]->Visible(false);
+							mCats[j]->CanMove(false);
+							TC[j] = i;
+						}
+						if ((mCats[j]->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
+							mCats[j]->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
+							!mCats[j]->GetGoingUp() &&
+							!mCats[j]->GetGoingDown() &&
+							!mCats[j]->GetTrampolineOnce()) {
+							mCats[j]->SetGoingDown(true);
+							mCats[j]->SetTrampolineOnce(true);
+							mCats[j]->SetTrampolineTarget(mTrampoline[i]->Position().x);
+							TC[j] = i;
+						}
+						if ((mCats[j]->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
+							mCats[j]->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
+							mCats[j]->Position().y < 400.0f &&
+							mCats[j]->GetGoingUp() &&
+							!mCats[j]->GetGoingDown() &&
+							mCats[j]->GetDirection() == "None") {
+							mCats[j]->SetGoingUp(false);
+							mCats[j]->SetGoingDown(true);
+							TC[j] = i;
+						}
+						if (TC[j] != 5000) {
+							mCats[j]->SetTrampolineTarget(mTrampoline[TC[j]]->Position().x);
+							if ((mCats[j]->Position().x + 34) > (mTrampoline[TC[j]]->Position().x + 60) ||
+								mCats[j]->Position().x - 34 < mTrampoline[TC[j]]->Position().x - 60) {
+								mCats[j]->SetGoingDown(false);
+								mCats[j]->SetGoingUp(false);
+								BounceBool = false;
+								mTrampoline[i]->SetBounced(false);
+								mCats[j]->SetInPlace(false);
+								TC[j] = 5000;
+							}
+						}
+					}
+					else {
+						if ((mCats[j]->Position().x + 34) <= mTrampoline[i]->Position().x + 60 &&
+							mCats[j]->Position().x - 34 >= (mTrampoline[i]->Position().x - 60) &&
+							(mCats[j]->Position().y + 32) >= mTrampoline[i]->Position().y - 14 &&
+							mCats[j]->Position().y - 32 <= (mTrampoline[i]->Position().y + 50) &&
+							!mCats[j]->GetGoingUp() &&
+							mCats[j]->GetDirection() == "None") {
+							mTrampoline[i]->SetBounced(true);
+							mCats[j]->SetGoingDown(false);
+							mCats[j]->SetGoingUp(true);
+							mTrampoline[i]->AddColor();
+							TC[j] = i;
+						}
+						if ((mCats[j]->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
+							mCats[j]->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
+							!mCats[j]->GetGoingUp() &&
+							!mCats[j]->GetGoingDown() &&
+							!mCats[j]->GetTrampolineOnce()) {
+							mCats[j]->SetGoingDown(true);
+							mCats[j]->SetTrampolineOnce(true);
+							mCats[j]->SetTrampolineTarget(mTrampoline[i]->Position().x);
+							TC[j] = i;
+						}
+						if ((mCats[j]->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
+							mCats[j]->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
+							mCats[j]->Position().y < 400.0f &&
+							!mCats[j]->GetGoingDown() &&
+							mCats[j]->GetGoingUp() &&
+							mCats[j]->GetDirection() == "None") {
+							mCats[j]->SetGoingUp(false);
+							mCats[j]->SetGoingDown(true);
+							TC[j] = i;
+						}
+						if (TC[j] != 5000) {
+							mCats[j]->SetTrampolineTarget(mTrampoline[TC[j]]->Position().x);
+							if ((mCats[j]->Position().x + 34) > (mTrampoline[TC[j]]->Position().x + 60) ||
+								mCats[j]->Position().x - 34 < mTrampoline[TC[j]]->Position().x - 60) {
+								mCats[j]->SetGoingDown(false);
+								mCats[j]->SetGoingUp(false);
+								BounceBool = false;
+								mTrampoline[i]->SetBounced(false);
+								mCats[j]->SetInPlace(false);
+								TC[j] = 5000;
+							}
+						}
+					}
+				}
 				if (mTrampoline[i]->GetColor() == 3) {
 					if ((mPlayer->Position().x + 34) <= mTrampoline[i]->Position().x + 60 &&
 						mPlayer->Position().x - 34 >= (mTrampoline[i]->Position().x - 60) &&
 						(mPlayer->Position().y + 32) >= mTrampoline[i]->Position().y - 14 &&
 						mPlayer->Position().y - 32 <= (mTrampoline[i]->Position().y + 50) &&
-						!mPlayer->IsAnimating() &&
-						!mPlayer->IgnoreCollisions()) {
+						!mPlayer->IsAnimating()) {
 						mPlayer->WasHit();
 						mPlayer->SetGoingDown(false);
 						mPlayer->SetGoingUp(true);
-						TC = i;
+						TC[3] = i;
 					}
 					if ((mPlayer->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
 						mPlayer->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
 						!mPlayer->IsAnimating() &&
 						!mPlayer->GetGoingUp()) {
 						mPlayer->SetGoingDown(true);
-						TC = i;
+						TC[3] = i;
 					}
 					if ((mPlayer->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
 						mPlayer->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
@@ -209,17 +323,17 @@ void PlayScreen::Update() {
 						mPlayer->GetGoingUp()) {
 						mPlayer->SetGoingUp(false);
 						mPlayer->SetGoingDown(true);
-						TC = i;
+						TC[3] = i;
 					}
-					if (TC != 5000) {
-						if ((mPlayer->Position().x + 34) > (mTrampoline[TC]->Position().x + 60) ||
-							mPlayer->Position().x - 34 < mTrampoline[TC]->Position().x - 60) {
+					if (TC[3] != 5000) {
+						if ((mPlayer->Position().x + 34) > (mTrampoline[TC[3]]->Position().x + 60) ||
+							mPlayer->Position().x - 34 < mTrampoline[TC[3]]->Position().x - 60) {
 							mPlayer->SetGoingDown(false);
 							mPlayer->SetGoingUp(false);
 							BounceBool = false;
 							mTrampoline[i]->SetBounced(false);
 							mPlayer->SetInPlace(false);
-							TC = 5000;
+							TC[3] = 5000;
 						}
 					}
 				}
@@ -228,20 +342,19 @@ void PlayScreen::Update() {
 						mPlayer->Position().x - 34 >= (mTrampoline[i]->Position().x - 60) &&
 						(mPlayer->Position().y + 32) >= mTrampoline[i]->Position().y - 14 &&
 						mPlayer->Position().y - 32 <= (mTrampoline[i]->Position().y + 50) &&
-						!mPlayer->IsAnimating() &&
-						!mPlayer->IgnoreCollisions()) {
+						!mPlayer->IsAnimating()) {
 						mTrampoline[i]->SetBounced(true);
 						mPlayer->SetGoingDown(false);
 						mPlayer->SetGoingUp(true);
 						mTrampoline[i]->AddColor();
-						TC = i;
+						TC[3] = i;
 					}
 					if ((mPlayer->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
 						mPlayer->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
 						!mPlayer->IsAnimating() &&
 						!mPlayer->GetGoingUp()) {
 						mPlayer->SetGoingDown(true);
-						TC = i;
+						TC[3] = i;
 					}
 					if ((mPlayer->Position().x + 34) <= (mTrampoline[i]->Position().x + 60) &&
 						mPlayer->Position().x - 34 >= mTrampoline[i]->Position().x - 60 &&
@@ -250,20 +363,32 @@ void PlayScreen::Update() {
 						mPlayer->GetGoingUp()) {
 						mPlayer->SetGoingUp(false);
 						mPlayer->SetGoingDown(true);
-						TC = i;
+						TC[3] = i;
 					}
-					if (TC != 5000) {
-						if ((mPlayer->Position().x + 34) > (mTrampoline[TC]->Position().x + 60) ||
-							mPlayer->Position().x - 34 < mTrampoline[TC]->Position().x - 60) {
+					if (TC[3] != 5000) {
+						if ((mPlayer->Position().x + 34) > (mTrampoline[TC[3]]->Position().x + 60) ||
+							mPlayer->Position().x - 34 < mTrampoline[TC[3]]->Position().x - 60) {
 							mPlayer->SetGoingDown(false);
 							mPlayer->SetGoingUp(false);
 							BounceBool = false;
 							mTrampoline[i]->SetBounced(false);
 							mPlayer->SetInPlace(false);
-							TC = 5000;
+							TC[3] = 5000;
 						}
 					}
 				}
+			}
+
+			for (int i = 0; i < 3; i++) {
+				mCats[i]->Update();
+				if (mPlayer->GetInPlace()) {
+					mCats[i]->SetPInPlace(true);
+				}
+				else {
+					mCats[i]->SetPInPlace(false);
+				}
+				mCats[i]->SetMoveBounds(Vector2((mBackground->Position(Local).x + 58) - 960, ((mBackground->Position().x + 960) - 153)));
+				mCats[i]->SetMovement(Vector2(mPlayer->Position(Local).x, mPlayer->Position(Local).y));
 			}
 
 			for (int i = 0; i < 5; i++) {
@@ -296,6 +421,9 @@ void PlayScreen::Update() {
 						for (int i = 0; i < 5; i++) {
 							mDoors[i]->Translate(-Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
 						}
+						for (int i = 0; i < 3; i++) {
+							mCats[i]->Translate(-Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
+						}
 						StuckDoor = false;
 					}
 				}
@@ -311,6 +439,9 @@ void PlayScreen::Update() {
 						}
 						for (int i = 0; i < 5; i++) {
 							mDoors[i]->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
+						}
+						for (int i = 0; i < 3; i++) {
+							mCats[i]->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
 						}
 						StuckDoor = false;
 					}
@@ -334,6 +465,9 @@ void PlayScreen::Update() {
 						for (int i = 0; i < 5; i++) {
 							mDoors[i]->Translate(-Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
 						}
+						for (int i = 0; i < 3; i++) {
+							mCats[i]->Translate(-Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
+						}
 					}
 				}
 				else if (mPlayer->Position().x > ((mBackground->Position().x + 960) - 153)) {
@@ -347,6 +481,9 @@ void PlayScreen::Update() {
 						}
 						for (int i = 0; i < 5; i++) {
 							mDoors[i]->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
+						}
+						for (int i = 0; i < 3; i++) {
+							mCats[i]->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
 						}
 					}
 				}
@@ -363,6 +500,9 @@ void PlayScreen::Update() {
 							for (int i = 0; i < 5; i++) {
 								mDoors[i]->Translate(-Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
 							}
+							for (int i = 0; i < 3; i++) {
+								mCats[i]->Translate(-Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
+							}
 						}
 						if (mPlayer->MoveReturn() == "Left") {
 							mBackground->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
@@ -374,6 +514,9 @@ void PlayScreen::Update() {
 							}
 							for (int i = 0; i < 5; i++) {
 								mDoors[i]->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
+							}
+							for (int i = 0; i < 3; i++) {
+								mCats[i]->Translate(Vec2_Right * 300.0f * mTimer->DeltaTime(), World);
 							}
 						}
 					}
@@ -399,12 +542,16 @@ void PlayScreen::Render() {
 
 		}
 		else {
-			for (int i = 0; i < 10; i++) {
-				mTreasure[i]->Render();
-			}
+
+		}
+		for (int i = 0; i < 10; i++) {
+			mTreasure[i]->Render();
 		}
 		for (int i = 0; i < 4; i++) {
 			mTrampoline[i]->Render();
+		}
+		for (int i = 0; i < 3; i++) {
+			mCats[i]->Render();
 		}
 		for (int i = 0; i < 5; i++) {
 			mDoors[i]->Render();
@@ -439,6 +586,22 @@ void PlayScreen::HandleLeevel() {
 				mDoors[i]->Active(true);
 				mDoors[i]->Position(5000.0f, 5000.0f);
 			}
+			for (int i = 0; i < 3; i++) {
+				delete mCats[i];
+				mCats[i] = new Cat();
+				mCats[i]->Parent(this);
+				mCats[i]->Active(true);
+				mCats[i]->CanMove(true);
+				if (i == 0) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.3f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+				else if (i == 1) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.5f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+				else if (i == 2) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.6f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+			}
 			for (int i = 0; i < 4; i++) {
 				if (i == 0) {
 					mTrampoline[i]->Position(Vector2(784.0f, 1150.0f));
@@ -457,6 +620,7 @@ void PlayScreen::HandleLeevel() {
 					mTrampoline[i]->SetColor(0);
 				}
 			}
+			LeevelComplete = false;
 		}
 		else if (mLeevel == 2) {
 			delete mBackground;
@@ -467,6 +631,22 @@ void PlayScreen::HandleLeevel() {
 				mTreasure[i]->Visible(true);
 				mTreasure[i]->Position(5000.0f, 5000.0f);
 			}
+			for (int i = 0; i < 3; i++) {
+				delete mCats[i];
+				mCats[i] = new Cat();
+				mCats[i]->Parent(this);
+				mCats[i]->Active(true);
+				mCats[i]->CanMove(true);
+				if (i == 0) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.3f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+				else if (i == 1) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.5f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+				else if (i == 2) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.6f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+			}
 			for (int i = 0; i < 5; i++) {
 				delete mDoors[i];
 				mDoors[i] = new Doors();
@@ -492,6 +672,7 @@ void PlayScreen::HandleLeevel() {
 					mTrampoline[i]->SetColor(0);
 				}
 			}
+			LeevelComplete = false;
 		}
 		else if (mLeevel == 3) {
 			delete mBackground;
@@ -502,6 +683,22 @@ void PlayScreen::HandleLeevel() {
 				mTreasure[i]->Visible(true);
 				mTreasure[i]->Position(5000.0f, 5000.0f);
 			}
+			for (int i = 0; i < 3; i++) {
+				delete mCats[i];
+				mCats[i] = new Cat();
+				mCats[i]->Parent(this);
+				mCats[i]->Active(true);
+				mCats[i]->CanMove(true);
+				if (i == 0) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.3f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+				else if (i == 1) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.5f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+				else if (i == 2) {
+					mCats[i]->Position((Graphics::SCREEN_WIDTH * 0.6f - 32), Graphics::SCREEN_HEIGHT * 0.4f);
+				}
+			}
 			for (int i = 0; i < 5; i++) {
 				delete mDoors[i];
 				mDoors[i] = new Doors();
@@ -527,11 +724,11 @@ void PlayScreen::HandleLeevel() {
 					mTrampoline[i]->SetColor(0);
 				}
 			}
+			LeevelComplete = false;
 		}
 		else if (mLeevel > 3) {
-			//Beat the game happy happy happy
+			mLeevel -= 4;
 		}
-		LeevelComplete = false;
 	}
 }
 

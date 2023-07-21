@@ -138,6 +138,9 @@
     <ClCompile Include="Doors.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -231,6 +234,9 @@
       <Filter>Header Files\Mappy</Filter>
     </ClInclude>
     <ClInclude Include="Doors.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Cat.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>

@@ -84,6 +84,10 @@ void Player::SetInPlace(bool b) {
 	InPlace = b;
 }
 
+bool Player::GetInPlace() {
+	return InPlace;
+}
+
 Player::Player() {
 	mTimer = Timer::Instance();
 	mInput = InputManager::Instance();
@@ -108,7 +112,7 @@ Player::Player() {
 	mDeathAnimation->Parent(this);
 	mDeathAnimation->Position(Vec2_Zero);
 	mDeathAnimation->SetWrapMode(Animation::WrapModes::Once);
-	//AddCollider(new BoxCollider(Vector2(56.0f, 52.0f)));
+	AddCollider(new BoxCollider(Vector2(50.0f, 46.0f)));
 
 	mId = PhysicsManager::Instance()->RegisterEntity(this, PhysicsManager::CollisionLayers::Friendly);
 
@@ -158,7 +162,7 @@ void Player::AddScore(int change) {
 
 bool Player::IgnoreCollisions()
 {
-	return !mVisible || mDead;
+	return !mVisible || mDead || GoingDown || GoingUp;
 }
 
 void Player::Hit(PhysEntity* other) {
